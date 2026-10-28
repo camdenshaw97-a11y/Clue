@@ -6,6 +6,37 @@ glance which version a screen is running.
 
 Times are Pacific.
 
+## 1.3 · October 28, 2026
+
+**Every screen redrawn to Camden's "Clue Screens" design**
+- The whole game now sits on a detective's desk: a dark green card table, parchment case notes
+  with a double rule, brass plaque buttons, a wax-red Accuse button, and a typewritten notebook.
+  Three typefaces do the work: Anton for titles and buttons, Special Elite for labels, the
+  notebook and the log, Libre Baskerville italic for the story and the flavor copy.
+- **Phones:** the join form is a paper slip with the room code in big block letters; the lobby
+  puts the suspects on paper and the players and the start button on a dark panel; the main card
+  stays a fixed 420 px so the tabs and buttons below never move, with a red "YOUR MOVE" tab when
+  it's yours; the die itself is the roll button ("TAP TO ROLL"); "Where to?" lists the rooms as
+  brass rows you can walk into and paper rows you head toward; the suggestion and accusation
+  sheets are parchment with the picked tiles going brass; showing a card is the one dark screen,
+  marked PRIVATE; the tabs are file-folder tabs leading into the ruled Detective Notes; game over
+  opens the confidential envelope with the solution, the awards and the standings.
+- **TV:** brass inlay around the felt on the start and winner screens; the lobby's join box and
+  setup sheet are paper with the code on cream tiles, the players on a dark panel; in the game
+  the board sits full height on the left with a brass divider, the "now" box is a paper telegram,
+  the player plates are dark with a suspect-colored spine, a felt-backed card fan and a brass
+  count, and the log is a typewriter ticker; suggestions and accusations come up on parchment
+  over a dimmed board, numbered on a red tab, with the ask chain in pills under the cards; the
+  winner screen ends with the three cards, the standings and paper award plaques.
+- **The Mansion's cards are painted now**: close-cropped portraits of the six suspects, each
+  weapon held big against a stormy sky, and a top-down view of every room (from Camden's
+  `clue-icons.js`). They show on the cards, the notebook, the tiles, the plates and the pieces on
+  the board. The other boards keep their emoji casts in the same card frames. A custom cast keeps
+  the Mansion's pictures for the names it leaves alone and gets plain icons for the ones it
+  renames.
+- The Mansion's table is now green felt (it was wine red); the other boards keep their own colors,
+  and their accent still tints the medallion ring and the room glow.
+
 ## 1.2 · October 28, 2026
 
 **The boards from Camden's Claude Design file**

@@ -7,7 +7,7 @@
   // Change this to rename the game everywhere.
   F.TITLE = 'FRIEND CLUE';
   // Shown small on the start screens. Goes up with every change; CHANGELOG.md says what each one was.
-  F.VERSION = '1.2';
+  F.VERSION = '1.3';
 
   F.$ = function (sel, root) { return (root || document).querySelector(sel); };
   F.esc = function (s) {
@@ -315,19 +315,33 @@
     rope: '<g fill="none" stroke="#a87b3e" stroke-width="5" stroke-linecap="round"><ellipse cx="32" cy="40" rx="20" ry="10"/><ellipse cx="32" cy="34" rx="16" ry="8"/><path d="M48 36c6-8 4-22-6-28"/></g><g fill="none" stroke="#6b4a1e" stroke-width="1.4" stroke-dasharray="2 3"><ellipse cx="32" cy="40" rx="20" ry="10"/><ellipse cx="32" cy="34" rx="16" ry="8"/></g>',
     wrench: '<path d="M44 6a12 12 0 0 0-10 16L8 48a5 5 0 0 0 8 8l26-26A12 12 0 0 0 58 20l-8 4-6-6 4-8z" fill="#aab3bb" stroke="#3d454c" stroke-width="2" stroke-linejoin="round"/>'
   };
+  // An icon is an emoji, 'svg:name' (a line drawing above) or 'art:Name' (a painted card from
+  // icons.js, which fills whatever box it's put in).
+  F.isArt = function (icon) { return !!(icon && icon.indexOf('art:') === 0 && window.ClueIcons && window.ClueIcons[icon.slice(4)]); };
   F.icon = function (icon) {
+    if (F.isArt(icon)) return '<span class="art-pic">' + window.ClueIcons[icon.slice(4)] + '</span>';
     if (icon && icon.indexOf('svg:') === 0) { var a = ART[icon.slice(4)]; if (a) return '<svg class="ico" viewBox="0 0 64 64" aria-hidden="true">' + a + '</svg>'; }
     return '<span class="emo">' + F.esc(icon || '❓') + '</span>';
   };
-  // A suspect: a colored medallion with their emoji, or a plain silhouette on the classic board.
+  // The same icon as bare SVG markup for dropping into a bigger SVG (the phone's map), or null for emoji.
+  F.iconSvgInner = function (icon) {
+    var html = null;
+    if (F.isArt(icon)) html = window.ClueIcons[icon.slice(4)];
+    else if (icon && icon.indexOf('svg:') === 0 && ART[icon.slice(4)]) html = ART[icon.slice(4)];
+    else return null;
+    return html.replace(/^<svg[^>]*>/, '').replace(/<\/svg>$/, '');
+  };
+  // A suspect: a colored medallion with their portrait or emoji, or a plain silhouette.
   F.suspectArt = function (theme, i) {
     var c = B.SUSPECT_COLORS[i], s = theme.suspects[i];
-    var inner = s && s.icon ? '<span class="emo">' + F.esc(s.icon) + '</span>'
+    var inner = s && F.isArt(s.icon) ? F.icon(s.icon)
+      : s && s.icon ? '<span class="emo">' + F.esc(s.icon) + '</span>'
       : '<svg viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="24" r="12" fill="' + c.ink + '" opacity=".85"/><path d="M10 60c2-14 11-21 22-21s20 7 22 21z" fill="' + c.ink + '" opacity=".85"/></svg>';
     return '<span class="med" style="--c1:' + c.c1 + ';--c2:' + c.c2 + '">' + inner + '</span>';
   };
   F.cardArt = function (theme, c) {
     var kind = B.cardKind(c), x = B.cardOf(theme, c);
+    if (x && F.isArt(x.icon)) return F.icon(x.icon);
     if (kind === 'suspect') return F.suspectArt(theme, B.cardIndex(c));
     return F.icon(x && x.icon);
   };
@@ -340,11 +354,11 @@
     var nm = x ? x.name : '?', longest = Math.max.apply(null, nm.split(' ').map(function (w) { return w.length; }));
     var fit = nm.length > 17 || longest > 10 ? ' xlong' : nm.length > 11 || longest > 8 ? ' long' : '';
     return '<div class="ccard ' + kind + fit + ' ' + (opts.size || '') + (opts.cls ? ' ' + opts.cls : '') + '"' + (opts.key ? ' data-key="' + opts.key + '"' : '') + (opts.attrs || '') +
-      (col ? ' style="--c1:' + col.c1 + ';--c2:' + col.c2 + '"' : '') + '><small>' + F.KIND[kind] + '</small><div class="art">' + F.cardArt(theme, c) + '</div><b>' + F.esc(x ? x.name : '?') + '</b></div>';
+      (col ? ' style="--c1:' + col.c1 + ';--c2:' + col.c2 + '"' : '') + '><small>' + F.KIND[kind] + '</small><div class="art"><span class="win">' + F.cardArt(theme, c) + '</span></div><b>' + F.esc(x ? x.name : '?') + '</b></div>';
   };
 
   // The game's mark: a magnifying glass over a question mark.
-  F.LOGO = '<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><circle cx="42" cy="42" r="31" fill="#f4ead5" stroke="#1a0a06" stroke-width="5"/><circle cx="42" cy="42" r="31" fill="none" stroke="#e2b85c" stroke-width="9"/><circle cx="42" cy="42" r="31" fill="none" stroke="#1a0a06" stroke-width="2" opacity=".5"/><path d="M64 64l24 24" stroke="#1a0a06" stroke-width="17" stroke-linecap="round"/><path d="M64 64l24 24" stroke="#7a1a26" stroke-width="10" stroke-linecap="round"/><text x="42" y="57" font-family="Georgia, Times New Roman, serif" font-weight="700" font-size="44" text-anchor="middle" fill="#7a1a26">?</text><path d="M26 30a20 20 0 0 1 14-10" stroke="#fff" stroke-width="4" fill="none" stroke-linecap="round" opacity=".8"/></svg>';
+  F.LOGO = '<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><circle cx="42" cy="42" r="31" fill="#f4ead5" stroke="#1a0a06" stroke-width="5"/><circle cx="42" cy="42" r="31" fill="none" stroke="#c9a050" stroke-width="9"/><path d="M64 64l24 24" stroke="#1a0a06" stroke-width="17" stroke-linecap="round"/><path d="M64 64l24 24" stroke="#8e1420" stroke-width="10" stroke-linecap="round"/><text x="42" y="56" text-anchor="middle" font-family="Anton, Impact, sans-serif" font-size="40" fill="#1d140c">?</text></svg>';
 
   /* ---- the board ---- */
 

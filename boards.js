@@ -138,9 +138,11 @@
       id: 'classic', name: 'The Mansion', blurb: 'The original. Six dinner guests, six weapons, nine rooms.',
       victim: 'Mr. Boddy',
       story: 'Mr. Boddy invited six guests to dinner at his mansion. Before dessert was served, he was found dead.',
-      suspects: [{ name: 'Miss Scarlet' }, { name: 'Colonel Mustard' }, { name: 'Mrs. White' }, { name: 'Mr. Green' }, { name: 'Mrs. Peacock' }, { name: 'Professor Plum' }],
-      weapons: [{ name: 'Candlestick', icon: C.candlestick }, { name: 'Knife', icon: C.knife }, { name: 'Lead Pipe', icon: C.pipe }, { name: 'Revolver', icon: C.revolver }, { name: 'Rope', icon: C.rope }, { name: 'Wrench', icon: C.wrench }],
-      rooms: [{ name: 'Study', icon: '🖋️' }, { name: 'Hall', icon: '🚪' }, { name: 'Lounge', icon: '🛋️' }, { name: 'Dining Room', icon: '🍽️' }, { name: 'Kitchen', icon: '🍳' }, { name: 'Ballroom', icon: '💃' }, { name: 'Conservatory', icon: '🌿' }, { name: 'Billiard Room', icon: '🎱' }, { name: 'Library', icon: '📚' }]
+      // The Mansion cast is drawn like the printed cards (icons.js): 'art:' icons are portraits,
+      // weapons on a stormy sky and top-down room views.
+      suspects: [{ name: 'Miss Scarlet', icon: 'art:Miss Scarlet' }, { name: 'Colonel Mustard', icon: 'art:Colonel Mustard' }, { name: 'Mrs. White', icon: 'art:Mrs. White' }, { name: 'Mr. Green', icon: 'art:Mr. Green' }, { name: 'Mrs. Peacock', icon: 'art:Mrs. Peacock' }, { name: 'Professor Plum', icon: 'art:Professor Plum' }],
+      weapons: [{ name: 'Candlestick', icon: 'art:Candlestick' }, { name: 'Knife', icon: 'art:Knife' }, { name: 'Lead Pipe', icon: 'art:Lead Pipe' }, { name: 'Revolver', icon: 'art:Revolver' }, { name: 'Rope', icon: 'art:Rope' }, { name: 'Wrench', icon: 'art:Wrench' }],
+      rooms: [{ name: 'Study', icon: 'art:Study' }, { name: 'Hall', icon: 'art:Hall' }, { name: 'Lounge', icon: 'art:Lounge' }, { name: 'Dining Room', icon: 'art:Dining Room' }, { name: 'Kitchen', icon: 'art:Kitchen' }, { name: 'Ballroom', icon: 'art:Ballroom' }, { name: 'Conservatory', icon: 'art:Conservatory' }, { name: 'Billiard Room', icon: 'art:Billiard Room' }, { name: 'Library', icon: 'art:Library' }]
     },
     {
       id: 'haunted', name: 'Haunted Manor', blurb: 'Halloween at the old Ashcombe place. Something in this house is still awake.',
@@ -190,7 +192,7 @@
   //   ink: text in the rooms; wall: room outlines; door: the door marks; center: the case file
   var LOOKS = {
     classic: {
-      bg: ['#5e1622', '#2e0a12', '#110306'], accent: '#e2b85c', frame: '#1b0a05',
+      bg: ['#1f3a2d', '#0e1a14', '#070d0a'], accent: '#c9a050', frame: '#1b0a05',
       floor: '#ecd27f', floorAlt: '#e3c66c', line: '#b9963f', wall: '#3b2412', door: '#8c2a17', ink: '#2b1a0c',
       rooms: ['#c9b48a', '#d9c39a', '#cf9b86', '#d2ad74', '#ddd0ae', '#e0bfa7', '#a9c79c', '#86b48d', '#bfa27f'],
       center: '#3d0e17', centerInk: '#e2b85c'
@@ -231,6 +233,11 @@
 
   // A cast the TV made up: suspects, weapons and rooms of your own (your friends as the suspects,
   // say). Anything left blank keeps the classic name; it plays on the classic board.
+  var PLAIN = {
+    suspects: [null, null, null, null, null, null],
+    weapons: [C.candlestick, C.knife, C.pipe, C.revolver, C.rope, C.wrench],
+    rooms: ['🖋️', '🚪', '🛋️', '🍽️', '🍳', '💃', '🌿', '🎱', '📚']
+  };
   function customTheme(c) {
     if (!c || typeof c !== 'object') return null;
     var name = clean(c.name, 24);
@@ -242,7 +249,8 @@
       for (var k = 0; k < n; k++) {
         var v = clean(src[k], kind === 'rooms' ? 20 : 22);
         if (v) got++;
-        out.push({ name: v || base[kind][k].name, icon: base[kind][k].icon, bare: !!v && kind === 'rooms' && /['’]s\b/.test(v) });
+        // A renamed card can't keep the Mansion's picture of it, so it gets a plain icon instead.
+        out.push({ name: v || base[kind][k].name, icon: v ? PLAIN[kind][k] : base[kind][k].icon, bare: !!v && kind === 'rooms' && /['’]s\b/.test(v) });
       }
       return out;
     }

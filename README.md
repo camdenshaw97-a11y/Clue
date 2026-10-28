@@ -121,6 +121,8 @@ sealed copy of the game and everyone carries on.
 - `boards.js`: the floor plan, the doors and passages, how far a roll gets you, and the five boards.
 - `common.js`: shared by both pages: the connection, dialogs, sounds, and the drawings (board, cards).
 - `decor.js`: the furniture in every room on every board.
+- `icons.js`: the Mansion cast's card art: portraits, the weapons on a stormy sky, top-down rooms.
+- `style.css`: the look shared by both pages (the detective's desk: felt, paper, brass, wax) and the fonts.
 - `tv.html`, `index.html`: the TV and the phones. `editor.js`: the TV's cast editor.
 - `test/play.js`: `npm test` plays games against a real server and checks the rules.
 

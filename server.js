@@ -23,7 +23,7 @@ const Boards = require('./boards');
 const PORT = process.env.PORT || 3000;
 const PUB = __dirname;
 // Only the page files are ever handed to a browser.
-const PAGE_FILES = new Set(['index.html', 'tv.html', 'common.js', 'boards.js', 'decor.js', 'editor.js', 'style.css', 'anton.woff2']);
+const PAGE_FILES = new Set(['index.html', 'tv.html', 'common.js', 'boards.js', 'decor.js', 'icons.js', 'editor.js', 'style.css', 'anton.woff2', 'special-elite.woff2', 'baskerville.woff2', 'baskerville-italic.woff2', 'baskerville-bold.woff2']);
 const MIME = {
   '.html': 'text/html; charset=utf-8', '.js': 'text/javascript; charset=utf-8',
   '.css': 'text/css; charset=utf-8', '.svg': 'image/svg+xml', '.png': 'image/png',
@@ -33,7 +33,7 @@ const MIME = {
 // A fingerprint of the pages as they are right now, so a screen left open across an update reloads itself.
 const BUILD = (() => {
   const h = crypto.createHash('sha1');
-  for (const f of ['index.html', 'tv.html', 'common.js', 'boards.js', 'decor.js', 'editor.js', 'style.css']) {
+  for (const f of ['index.html', 'tv.html', 'common.js', 'boards.js', 'decor.js', 'icons.js', 'editor.js', 'style.css']) {
     try { h.update(fs.readFileSync(path.join(PUB, f))); } catch (e) { /* missing file: nothing to add */ }
   }
   return h.digest('hex').slice(0, 12);
@@ -1023,7 +1023,7 @@ function publicState(room) {
       theme: g.theme, dice: g.dice, notesMode: g.notesMode, order: g.order, cur: g.cur, turnCount: g.turnCount,
       pawns: g.pawns, weapons: g.weapons, players,
       turn: g.turn ? { rolled: g.turn.rolled, roll: g.turn.roll, moved: g.turn.moved, entered: g.turn.entered, suggested: g.turn.suggested, from: g.turn.from, passage: g.turn.passage, stuck: g.turn.stuck, stay: g.turn.stay, reach: g.turn.opts && !g.turn.moved ? g.turn.opts.filter(o => o.reach).map(o => o.r) : [] } : null,
-      sugg: sg ? { by: sg.by, s: sg.s, w: sg.w, r: sg.r, ask: sg.ask, i: sg.i, passes: sg.passes, shower: sg.shower, waiting: sg.waiting, asking: sg.asking || null, nobody: sg.nobody } : null,
+      sugg: sg ? { by: sg.by, s: sg.s, w: sg.w, r: sg.r, ask: sg.ask, i: sg.i, passes: sg.passes, shower: sg.shower, waiting: sg.waiting, asking: sg.asking || null, nobody: sg.nobody, n: sg.n } : null,
       acc: g.acc ? Object.assign({ by: g.acc.by, s: g.acc.s, w: g.acc.w, r: g.acc.r, done: g.acc.done }, g.acc.done ? { ok: g.acc.ok, right: g.acc.right } : {}) : null,
       history: g.history.slice(-60), revealed: g.revealed,
       clock: g.clock && g.clock.show ? { what: g.clock.what, left: Math.max(0, g.clock.at - Date.now()), len: g.clock.len } : null,
