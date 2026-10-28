@@ -46,7 +46,7 @@ const roomOf = tv => rooms.get(tv.state.code);
 
 async function main() {
   /* ---------------------------------------------------- the data and the floor plan */
-  check('five boards, each with 6 suspects, 6 weapons and 9 rooms', B.THEMES.length === 5 && B.THEMES.every(t => t.suspects.length === 6 && t.weapons.length === 6 && t.rooms.length === 9));
+  check('six boards, each with 6 suspects, 6 weapons and 9 rooms', B.THEMES.length === 6 && B.THEMES.every(t => t.suspects.length === 6 && t.weapons.length === 6 && t.rooms.length === 9));
   check('no two cards on a board share a name', B.THEMES.every(t => ['suspects', 'weapons', 'rooms'].every(k => new Set(t[k].map(x => x.name.toLowerCase())).size === t[k].length)));
   check('every board has its own look', B.THEMES.every(t => B.LOOKS[t.id] && B.LOOKS[t.id].rooms.length === 9));
   check('21 cards: 6 suspects, 6 weapons, 9 rooms', B.CARDS.length === 21 && B.CARDS.filter(c => c[0] === 'S').length === 6 && B.CARDS.filter(c => c[0] === 'R').length === 9);
@@ -278,7 +278,7 @@ async function main() {
     t3.send({ t: 'h', a: 'start' });
     const done = await t3.until(s => s.phase === 'gameOver', 60000);
     const g3 = done && t3.state.game;
-    check(n + ' bots finish a game on the ' + B.themeById(theme).name + ' board, solved, with no wrong accusations', done && g3.why === 'solved' && !g3.log.some(l => l.kind === 'wrong'), done ? g3.why : 'still ' + (t3.state && t3.state.phase));
+    check(n + ' bots finish a game on ' + B.themeById(theme).name + ', solved, with no wrong accusations', done && g3.why === 'solved' && !g3.log.some(l => l.kind === 'wrong'), done ? g3.why : 'still ' + (t3.state && t3.state.phase));
     t3.close();
   }
 

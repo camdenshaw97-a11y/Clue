@@ -23,7 +23,7 @@ const Boards = require('./boards');
 const PORT = process.env.PORT || 3000;
 const PUB = __dirname;
 // Only the page files are ever handed to a browser.
-const PAGE_FILES = new Set(['index.html', 'tv.html', 'common.js', 'boards.js', 'editor.js', 'style.css', 'anton.woff2']);
+const PAGE_FILES = new Set(['index.html', 'tv.html', 'common.js', 'boards.js', 'decor.js', 'editor.js', 'style.css', 'anton.woff2']);
 const MIME = {
   '.html': 'text/html; charset=utf-8', '.js': 'text/javascript; charset=utf-8',
   '.css': 'text/css; charset=utf-8', '.svg': 'image/svg+xml', '.png': 'image/png',
@@ -33,7 +33,7 @@ const MIME = {
 // A fingerprint of the pages as they are right now, so a screen left open across an update reloads itself.
 const BUILD = (() => {
   const h = crypto.createHash('sha1');
-  for (const f of ['index.html', 'tv.html', 'common.js', 'boards.js', 'editor.js', 'style.css']) {
+  for (const f of ['index.html', 'tv.html', 'common.js', 'boards.js', 'decor.js', 'editor.js', 'style.css']) {
     try { h.update(fs.readFileSync(path.join(PUB, f))); } catch (e) { /* missing file: nothing to add */ }
   }
   return h.digest('hex').slice(0, 12);

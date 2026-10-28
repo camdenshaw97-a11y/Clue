@@ -7,7 +7,7 @@
   // Change this to rename the game everywhere.
   F.TITLE = 'FRIEND CLUE';
   // Shown small on the start screens. Goes up with every change; CHANGELOG.md says what each one was.
-  F.VERSION = '1.0';
+  F.VERSION = '1.1';
 
   F.$ = function (sel, root) { return (root || document).querySelector(sel); };
   F.esc = function (s) {
@@ -365,7 +365,7 @@
   // The whole board as one SVG (rooms, hallways, doors, passages, start squares, the case file).
   F.boardSvg = function (theme, opts) {
     opts = opts || {};
-    var L = B.lookOf(theme), W = F.BOARD_W, H = F.BOARD_H, esc = F.esc, x, y, k, h = [];
+    var L = B.lookOf(theme), lookId = (theme && (theme.look || theme.id)) || 'classic', W = F.BOARD_W, H = F.BOARD_H, esc = F.esc, x, y, k, h = [];
     h.push('<svg class="bsvg" viewBox="0 0 ' + W + ' ' + H + '" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">');
     h.push('<defs><pattern id="rt" width="14" height="14" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="7" height="14" fill="#fff" opacity=".07"/></pattern>' +
       '<radialGradient id="cg" cx="50%" cy="40%" r="70%"><stop offset="0" stop-color="#fff" stop-opacity=".18"/><stop offset="1" stop-color="#000" stop-opacity=".25"/></radialGradient></defs>');
@@ -388,11 +388,14 @@
       var X = r.x * CELL, Y = r.y * CELL, Wd = r.w * CELL, Ht = r.h * CELL, info = theme.rooms[i] || {};
       h.push('<rect x="' + X + '" y="' + Y + '" width="' + Wd + '" height="' + Ht + '" fill="' + L.rooms[i] + '"/>');
       h.push('<rect x="' + X + '" y="' + Y + '" width="' + Wd + '" height="' + Ht + '" fill="url(#rt)"/>');
+      // the furniture, like the printed board (drawn before the walls so it sits inside them)
+      var furnished = window.Decor && Decor.has(lookId);
+      if (furnished) h.push(Decor.room(lookId, i, X, Y, Wd, Ht));
       h.push('<rect x="' + (X + 2.5) + '" y="' + (Y + 2.5) + '" width="' + (Wd - 5) + '" height="' + (Ht - 5) + '" fill="none" stroke="' + L.wall + '" stroke-width="5"/>');
-      // the room's picture, faint, in the middle
-      h.push('<text x="' + (X + Wd / 2) + '" y="' + (Y + Ht / 2 + (r.h <= 4 ? 4 : 12)) + '" font-size="' + (r.h <= 4 ? 46 : 66) + '" text-anchor="middle" dominant-baseline="middle" opacity=".32">' + esc(info.icon && info.icon.indexOf('svg:') !== 0 ? info.icon : '') + '</text>');
+      // with no furniture, the room's picture, faint, in the middle
+      if (!furnished) h.push('<text x="' + (X + Wd / 2) + '" y="' + (Y + Ht / 2 + (r.h <= 4 ? 4 : 12)) + '" font-size="' + (r.h <= 4 ? 46 : 66) + '" text-anchor="middle" dominant-baseline="middle" opacity=".32">' + esc(info.icon && info.icon.indexOf('svg:') !== 0 ? info.icon : '') + '</text>');
       var name = String(info.name || '').toUpperCase(), fs = Math.min(26, Math.floor((Wd - 18) / Math.max(4, name.length * 0.52)));
-      h.push('<text class="rn" data-room="' + i + '" x="' + (X + Wd / 2) + '" y="' + (Y + 30) + '" font-family="Anton, Impact, sans-serif" font-size="' + fs + '" letter-spacing="1" text-anchor="middle" fill="' + L.ink + '" stroke="' + L.rooms[i] + '" stroke-width="4" paint-order="stroke">' + esc(name) + '</text>');
+      h.push('<text class="rn" data-room="' + i + '" x="' + (X + Wd / 2) + '" y="' + (Y + 30) + '" font-family="Anton, Impact, sans-serif" font-size="' + fs + '" letter-spacing="1" text-anchor="middle" fill="' + L.ink + '" stroke="' + L.rooms[i] + '" stroke-width="5" paint-order="stroke">' + esc(name) + '</text>');
     });
     // doors: a gap in the wall with a bright threshold
     B.DOORS.forEach(function (d) {

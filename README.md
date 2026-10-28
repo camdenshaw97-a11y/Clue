@@ -75,14 +75,15 @@ don't name something you already know is out by accident.
 
 ## Boards
 
-Every board plays on the same floor plan with the same rules; the suspects, weapons, rooms and
-the look change.
+Every board plays on the same floor plan with the same rules; the suspects, weapons, rooms, the
+look and the furniture in every room change (`decor.js` draws the furniture).
 
 - **The Mansion** (classic): Mr. Boddy's dinner party.
 - **Haunted Manor:** Halloween at the Ashcombe place.
 - **San Diego:** La Jolla Cove to Pacific Beach, with a secret passage from the Hotel del to the Zoo.
 - **Las Vegas:** a casino owner's luck runs out.
 - **House Party (18+):** a party that got way out of hand.
+- **The Office:** somebody at the Scranton branch finally snapped (Toby from HR, naturally).
 - **My casts…** on the TV: make your own: your friends as the suspects, inside jokes as the
   weapons, places you all know as the rooms. Saved on that computer; Save to file / Load from file
   moves them between computers. Anything you leave blank keeps the classic card.
@@ -118,6 +119,7 @@ sealed copy of the game and everyone carries on.
 - `server.js`: rooms, the rules, the bots, saving and restoring.
 - `boards.js`: the floor plan, the doors and passages, how far a roll gets you, and the five boards.
 - `common.js`: shared by both pages: the connection, dialogs, sounds, and the drawings (board, cards).
+- `decor.js`: the furniture in every room on every board.
 - `tv.html`, `index.html`: the TV and the phones. `editor.js`: the TV's cast editor.
 - `test/play.js`: `npm test` plays games against a real server and checks the rules.
 

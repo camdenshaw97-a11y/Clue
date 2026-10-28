@@ -173,6 +173,14 @@
       suspects: [{ name: 'The Ex', icon: '💔' }, { name: 'The Hype Man', icon: '📣' }, { name: 'The Designated Driver', icon: '🚗' }, { name: 'The Stoner', icon: '🌿' }, { name: 'The DJ', icon: '🎧' }, { name: 'The Plus-One', icon: '💋' }],
       weapons: [{ name: 'Aux Cord', icon: '🔌' }, { name: 'Red Solo Cup', icon: '🥤' }, { name: 'Tequila Bottle', icon: '🥃' }, { name: 'Vape', icon: '💨' }, { name: 'Ring Light', icon: '💡' }, { name: 'Pong Paddle', icon: '🏓' }],
       rooms: [{ name: 'Parents’ Bedroom', icon: '🛏️' }, { name: 'Front Lawn', icon: '🚓' }, { name: 'Hot Tub', icon: '🫧' }, { name: 'Kitchen Island', icon: '🍕' }, { name: 'Bathroom Line', icon: '🚽' }, { name: 'Dance Floor', icon: '🪩' }, { name: 'Back Porch', icon: '🔥' }, { name: 'The Garage', icon: '🍺' }, { name: 'Gaming Room', icon: '🎮' }]
+    },
+    {
+      id: 'office', name: 'The Office', blurb: 'Somebody at the Scranton branch finally snapped.',
+      victim: 'Toby from HR',
+      story: 'On the morning of the Dundies, Toby from HR was found face down in the Scranton branch. Everyone in the office had a motive. Some of them had several.',
+      suspects: [{ name: 'Michael Scott', icon: '☕' }, { name: 'Dwight Schrute', icon: '🐻' }, { name: 'Angela Martin', icon: '🐈' }, { name: 'Kevin Malone', icon: '🍪' }, { name: 'Jim Halpert', icon: '👔' }, { name: 'Pam Beesly', icon: '🎨' }],
+      weapons: [{ name: 'Dundie Award', icon: '🏆' }, { name: 'Stapler in Jell-O', icon: '🍮' }, { name: 'Pot of Chili', icon: '🍲' }, { name: 'Katana', icon: '🗡️' }, { name: 'Ream of Paper', icon: '📄' }, { name: 'Pretzel', icon: '🥨' }],
+      rooms: [{ name: 'Michael’s Office', bare: true, icon: '🏆' }, { name: 'Reception', bare: true, icon: '🛎️' }, { name: 'Conference Room', icon: '📊' }, { name: 'Break Room', icon: '☕' }, { name: 'Warehouse', icon: '📦' }, { name: 'Bullpen', icon: '🖥️' }, { name: 'Schrute Farms', bare: true, icon: '🌾' }, { name: 'Annex', icon: '🗂️' }, { name: 'Accounting', bare: true, icon: '🧮' }]
     }
   ];
 
@@ -210,6 +218,12 @@
       floor: '#a37147', floorAlt: '#97663d', line: '#6e4627', wall: '#170c20', door: '#ffe14d', ink: '#ffffff',
       rooms: ['#5a2f80', '#2d7363', '#2463a0', '#8a4130', '#3d3f5c', '#6a2380', '#33652d', '#7a5422', '#2e3480'],
       center: '#16061f', centerInk: '#ff5ad9'
+    },
+    office: {
+      bg: ['#45698f', '#203750', '#0a1522'], accent: '#f2c14e', frame: '#101a26',
+      floor: '#a3acb8', floorAlt: '#99a2ae', line: '#6c7684', wall: '#1f2a36', door: '#f2c14e', ink: '#1f2a36',
+      rooms: ['#dccfb3', '#cfd8e3', '#c3d0db', '#e5d6bb', '#c9c3b6', '#d4dbe3', '#b7d39a', '#d9ccbd', '#cdd5dc'],
+      center: '#203750', centerInk: '#f2c14e'
     }
   };
 

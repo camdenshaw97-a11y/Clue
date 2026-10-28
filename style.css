@@ -5,6 +5,8 @@
   font-display: swap;
 }
 
+html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+
 :root {
   --wine: #5e1622;
   --wine-deep: #2e0a12;
@@ -33,9 +35,10 @@
 /* --------------------------------------------------------------- pictures */
 .emo { font-style: normal; line-height: 1; font-family: 'Apple Color Emoji', 'Segoe UI Emoji', 'Noto Color Emoji', sans-serif; }
 .ico { display: block; width: 100%; height: 100%; }
-.med { display: inline-flex; align-items: center; justify-content: center; border-radius: 50%; background: radial-gradient(circle at 35% 30%, #fff8, transparent 55%), linear-gradient(var(--c1), var(--c2)); box-shadow: inset 0 -3px 0 #0003, 0 0 0 2px #0006; overflow: hidden; }
+.med { position: relative; display: inline-flex; align-items: center; justify-content: center; flex: none; letter-spacing: 0; text-indent: 0; border-radius: 50%; background: radial-gradient(circle at 35% 30%, #fff8, transparent 55%), linear-gradient(var(--c1), var(--c2)); box-shadow: inset 0 -3px 0 #0003, 0 0 0 2px #0006; overflow: hidden; }
 .med svg { width: 78%; height: 78%; margin-top: 14%; }
-.med .emo { font-size: 60%; }
+/* The emoji sits dead center in its circle, whatever text styles are around it. */
+.med .emo { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); font-size: 60%; line-height: 1; letter-spacing: 0; text-indent: 0; font-weight: 400; white-space: nowrap; text-align: center; }
 
 /* --------------------------------------------------------------- cards
    One card: the kind on top, a picture, the name. Size with font-size (the card is 10em wide). */

@@ -6,6 +6,25 @@ glance which version a screen is running.
 
 Times are Pacific.
 
+## 1.1 · October 28, 2026
+
+**Furnished rooms, The Office, and centered pieces**
+- **Every room is furnished now**, like the printed board: a billiard table with racked balls in
+  the Billiard Room, a grand piano and parquet in the Ballroom, a dining table laid for dinner,
+  sofas, armchairs and a fireplace in the Lounge, bookshelves in the Library, a stove and sink in
+  the Kitchen, palms in the Conservatory, and so on. Every board has its own furniture: coffins,
+  cauldrons and cobwebs in the Haunted Manor; jets on the Midway deck, a ball field at Petco Park
+  and the sea at La Jolla Cove in San Diego; slot machines, card tables and wedding pews in Las
+  Vegas; a hot tub, beer pong and a DJ booth at the House Party. The furniture shows on the TV and
+  on the phone's map. Weapons and pieces sit on top of it, as on the real board.
+- **New board: The Office.** Michael Scott, Dwight Schrute, Angela Martin, Kevin Malone, Jim
+  Halpert and Pam Beesly; the Dundie Award, a stapler in Jell-O, a pot of chili, a katana, a ream
+  of paper and a pretzel; Michael's Office (secret passage down to the Warehouse), Reception, the
+  Conference Room (secret passage to Schrute Farms), the Break Room, the Bullpen, the Annex and
+  Accounting. Toby from HR is the victim. Its own look: carpet, cubicles, vending machines.
+- **Fix:** the emoji on the colored circles (your suspect on the phone, the plates and pieces on
+  the TV) sat off-center on iPhones. They're centered now, and iPhones no longer enlarge them.
+
 ## 1.0 · October 27, 2026
 
 **The first version**

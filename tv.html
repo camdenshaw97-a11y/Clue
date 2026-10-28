@@ -112,6 +112,7 @@
   .pawn.hop { animation: hop .16s ease-out; }
   @keyframes hop { 50% { transform: translateY(-12px) scale(1.15); } }
   .pawn.out { filter: grayscale(.7); opacity: .6; }
+  .pawn > .emo { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); line-height: 1; letter-spacing: 0; }
   .pawn .tg { position: absolute; top: 31px; left: 50%; transform: translateX(-50%); font: 400 13px/1 var(--display); letter-spacing: .06em; color: #fff; background: #000c; padding: 3px 6px 1px; border-radius: 6px; white-space: nowrap; display: none; }
   .pawn.up .tg { display: block; }
   .pawn.poof { animation: poof .5s ease-in forwards; }
@@ -360,6 +361,7 @@
 </div>
 
 <script src="/boards.js"></script>
+<script src="/decor.js"></script>
 <script src="/common.js"></script>
 <script src="/editor.js"></script>
 <script>
