@@ -76,7 +76,8 @@ don't name something you already know is out by accident.
 ## Boards
 
 Every board plays on the same floor plan with the same rules; the suspects, weapons, rooms, the
-look and the furniture in every room change (`decor.js` draws the furniture).
+look and the furniture in every room change. The boards are drawn to Camden's Claude Design
+file (`decor.js` holds the skins and the furniture).
 
 - **The Mansion** (classic): Mr. Boddy's dinner party.
 - **Haunted Manor:** Halloween at the Ashcombe place.

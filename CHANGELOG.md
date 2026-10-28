@@ -6,6 +6,22 @@ glance which version a screen is running.
 
 Times are Pacific.
 
+## 1.2 · October 28, 2026
+
+**The boards from Camden's Claude Design file**
+- Every board is now drawn to Camden's designs (Clue Board v2 for the mansion, Themed Boards for
+  the other five): a framed board with the six suspects' alcoves and START squares outside the
+  rooms, slate (or themed) hallway tiles, each room with its own floor (wood planks, carpet,
+  checkerboard, grass, sand), trim and a soft inner shadow, windows on the outside walls, door
+  leaves swung open at every doorway, a pill plaque with the room's name, labeled secret-passage
+  stairs, and a case file in the middle with the board's name, the envelope and the story (the
+  mansion gets the staircase down to the cellar instead). Las Vegas glows neon. The phone's map
+  shows the same board.
+- The classic rooms are furnished the way the design has them: the Study's desk and lamp, the
+  Hall's runner and grandfather clock, the Lounge's green rug by the fire, the laid dining table
+  under its chandelier, the Ballroom's parquet medallion, the Kitchen's range, pantry and roast.
+- The dice on the TV moved down below the case file, so they never cover the envelope.
+
 ## 1.1 · October 28, 2026
 
 **Furnished rooms, The Office, and centered pieces**

@@ -7,7 +7,7 @@
   // Change this to rename the game everywhere.
   F.TITLE = 'FRIEND CLUE';
   // Shown small on the start screens. Goes up with every change; CHANGELOG.md says what each one was.
-  F.VERSION = '1.1';
+  F.VERSION = '1.2';
 
   F.$ = function (sel, root) { return (root || document).querySelector(sel); };
   F.esc = function (s) {
@@ -362,68 +362,11 @@
     return { x: x0 + slot * step, y: Y + H - (isWeapon ? 58 : 22) };
   };
 
-  // The whole board as one SVG (rooms, hallways, doors, passages, start squares, the case file).
+  F.FRAME = 40;
+  // The whole board as one SVG, drawn from Camden's board designs (see decor.js). The viewBox
+  // starts 40 px outside the field so the frame and the suspects' alcoves are part of it.
   F.boardSvg = function (theme, opts) {
-    opts = opts || {};
-    var L = B.lookOf(theme), lookId = (theme && (theme.look || theme.id)) || 'classic', W = F.BOARD_W, H = F.BOARD_H, esc = F.esc, x, y, k, h = [];
-    h.push('<svg class="bsvg" viewBox="0 0 ' + W + ' ' + H + '" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">');
-    h.push('<defs><pattern id="rt" width="14" height="14" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="7" height="14" fill="#fff" opacity=".07"/></pattern>' +
-      '<radialGradient id="cg" cx="50%" cy="40%" r="70%"><stop offset="0" stop-color="#fff" stop-opacity=".18"/><stop offset="1" stop-color="#000" stop-opacity=".25"/></radialGradient></defs>');
-    h.push('<rect width="' + W + '" height="' + H + '" fill="' + L.frame + '"/>');
-    // hallways: a checker of tiles
-    h.push('<g>');
-    for (y = 0; y < B.ROWS; y++) for (x = 0; x < B.COLS; x++) {
-      var t = B.GRID[y][x];
-      if (t !== 'hall' && t !== 'start') continue;
-      h.push('<rect x="' + (x * CELL + 0.5) + '" y="' + (y * CELL + 0.5) + '" width="' + (CELL - 1) + '" height="' + (CELL - 1) + '" rx="2" fill="' + ((x + y) % 2 ? L.floorAlt : L.floor) + '" stroke="' + L.line + '" stroke-width="1"/>');
-    }
-    h.push('</g>');
-    // start squares, each in its suspect's color
-    B.STARTS.forEach(function (s, i) {
-      var c = B.SUSPECT_COLORS[i];
-      h.push('<circle cx="' + (s.x * CELL + CELL / 2) + '" cy="' + (s.y * CELL + CELL / 2) + '" r="15" fill="' + c.c2 + '" stroke="' + c.c1 + '" stroke-width="3" opacity=".9"/>');
-    });
-    // rooms
-    B.ROOMS.forEach(function (r, i) {
-      var X = r.x * CELL, Y = r.y * CELL, Wd = r.w * CELL, Ht = r.h * CELL, info = theme.rooms[i] || {};
-      h.push('<rect x="' + X + '" y="' + Y + '" width="' + Wd + '" height="' + Ht + '" fill="' + L.rooms[i] + '"/>');
-      h.push('<rect x="' + X + '" y="' + Y + '" width="' + Wd + '" height="' + Ht + '" fill="url(#rt)"/>');
-      // the furniture, like the printed board (drawn before the walls so it sits inside them)
-      var furnished = window.Decor && Decor.has(lookId);
-      if (furnished) h.push(Decor.room(lookId, i, X, Y, Wd, Ht));
-      h.push('<rect x="' + (X + 2.5) + '" y="' + (Y + 2.5) + '" width="' + (Wd - 5) + '" height="' + (Ht - 5) + '" fill="none" stroke="' + L.wall + '" stroke-width="5"/>');
-      // with no furniture, the room's picture, faint, in the middle
-      if (!furnished) h.push('<text x="' + (X + Wd / 2) + '" y="' + (Y + Ht / 2 + (r.h <= 4 ? 4 : 12)) + '" font-size="' + (r.h <= 4 ? 46 : 66) + '" text-anchor="middle" dominant-baseline="middle" opacity=".32">' + esc(info.icon && info.icon.indexOf('svg:') !== 0 ? info.icon : '') + '</text>');
-      var name = String(info.name || '').toUpperCase(), fs = Math.min(26, Math.floor((Wd - 18) / Math.max(4, name.length * 0.52)));
-      h.push('<text class="rn" data-room="' + i + '" x="' + (X + Wd / 2) + '" y="' + (Y + 30) + '" font-family="Anton, Impact, sans-serif" font-size="' + fs + '" letter-spacing="1" text-anchor="middle" fill="' + L.ink + '" stroke="' + L.rooms[i] + '" stroke-width="5" paint-order="stroke">' + esc(name) + '</text>');
-    });
-    // doors: a gap in the wall with a bright threshold
-    B.DOORS.forEach(function (d) {
-      var x1, y1, x2, y2;
-      if (d.x === d.rx) { var ey = d.y > d.ry ? (d.ry + 1) * CELL : d.ry * CELL; x1 = d.rx * CELL + 6; x2 = (d.rx + 1) * CELL - 6; y1 = y2 = ey; }
-      else { var ex = d.x > d.rx ? (d.rx + 1) * CELL : d.rx * CELL; y1 = d.ry * CELL + 6; y2 = (d.ry + 1) * CELL - 6; x1 = x2 = ex; }
-      h.push('<line x1="' + x1 + '" y1="' + y1 + '" x2="' + x2 + '" y2="' + y2 + '" stroke="' + L.floor + '" stroke-width="12"/>');
-      h.push('<line x1="' + x1 + '" y1="' + y1 + '" x2="' + x2 + '" y2="' + y2 + '" stroke="' + L.door + '" stroke-width="5" stroke-linecap="round"/>');
-    });
-    // secret passages: a staircase in the room's outer corner
-    B.ROOMS.forEach(function (r, i) {
-      if (r.passage == null) return;
-      var cx = (r.x === 0 ? r.x * CELL + 26 : (r.x + r.w) * CELL - 26), cy = (r.y === 0 ? r.y * CELL + 60 : (r.y + r.h) * CELL - 96);
-      if (r.y !== 0 && r.h > 4) cy = (r.y + r.h) * CELL - 100;
-      h.push('<g class="pass" data-room="' + i + '"><rect x="' + (cx - 17) + '" y="' + (cy - 17) + '" width="34" height="34" rx="5" fill="' + L.frame + '" opacity=".85"/>');
-      for (k = 0; k < 4; k++) h.push('<rect x="' + (cx - 13 + k * 6) + '" y="' + (cy + 9 - k * 6) + '" width="' + (26 - k * 6) + '" height="5" fill="' + L.accent + '"/>');
-      h.push('</g>');
-    });
-    // the case file in the middle
-    var c = B.CENTER, CX = c.x * CELL, CY = c.y * CELL, CW = c.w * CELL, CH = c.h * CELL;
-    h.push('<rect x="' + CX + '" y="' + CY + '" width="' + CW + '" height="' + CH + '" rx="8" fill="' + L.center + '" stroke="' + L.centerInk + '" stroke-width="3"/>');
-    h.push('<rect x="' + CX + '" y="' + CY + '" width="' + CW + '" height="' + CH + '" rx="8" fill="url(#cg)"/>');
-    if (!opts.noEnvelope) {
-      var ex0 = CX + 30, ey0 = CY + 56, ew = CW - 60, eh = 92;
-      h.push('<g class="env"><rect x="' + ex0 + '" y="' + ey0 + '" width="' + ew + '" height="' + eh + '" rx="4" fill="#efe1bf" stroke="#5a3d1a" stroke-width="2"/><path d="M' + ex0 + ' ' + ey0 + 'L' + (ex0 + ew / 2) + ' ' + (ey0 + 44) + 'L' + (ex0 + ew) + ' ' + ey0 + '" fill="#e2cfa3" stroke="#5a3d1a" stroke-width="2"/><circle cx="' + (ex0 + ew / 2) + '" cy="' + (ey0 + 44) + '" r="11" fill="#9b1b2a"/><text x="' + (ex0 + ew / 2) + '" y="' + (ey0 + 80) + '" font-family="Anton, Impact, sans-serif" font-size="15" letter-spacing="2" text-anchor="middle" fill="#5a3d1a">TOP SECRET</text></g>');
-      h.push('<text x="' + (CX + CW / 2) + '" y="' + (CY + 34) + '" font-family="Anton, Impact, sans-serif" font-size="22" letter-spacing="3" text-anchor="middle" fill="' + L.centerInk + '">CASE FILE</text>');
-    }
-    h.push('</svg>');
-    return h.join('');
+    var lookId = (theme && (theme.look || theme.id)) || 'classic';
+    return window.Decor.board(window.Decor.SKINS[lookId] ? lookId : 'classic', theme, B, opts);
   };
 })();

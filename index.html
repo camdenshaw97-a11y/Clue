@@ -177,7 +177,7 @@
   .hist .h1 small { color: #c9a9a0; font-weight: 700; }
   .hist .h2 { font-size: 13px; color: #e8d6c6; margin: 4px 0 0 32px; line-height: 1.5; }
   .hist .h2 .x { color: #ff8a80; } .hist .h2 .y { color: #9fd3ff; } .hist .h2 .n { color: #ff6a60; font-weight: 800; } .hist .h2 .me { color: #6dffa8; font-weight: 800; }
-  .mapw { position: relative; width: 100%; aspect-ratio: 960 / 1000; border-radius: 10px; overflow: hidden; box-shadow: 0 0 0 3px var(--accent), 0 10px 30px #0008; }
+  .mapw { position: relative; width: 100%; aspect-ratio: 1040 / 1080; border-radius: 10px; overflow: hidden; box-shadow: 0 0 0 3px var(--accent), 0 10px 30px #0008; }
   .mapw svg { position: absolute; inset: 0; width: 100%; height: 100%; }
   .mapLegend { font-size: 12px; color: #c9a9a0; text-align: center; margin-top: 10px; line-height: 1.5; }
 
@@ -736,7 +736,7 @@
       if (s === me.suspect) o.push('<circle cx="' + p.x + '" cy="' + p.y + '" r="25" fill="none" stroke="#fff" stroke-width="5"><animate attributeName="r" values="22;30;22" dur="1.4s" repeatCount="indefinite"/></circle>');
       o.push('<circle cx="' + p.x + '" cy="' + p.y + '" r="15" fill="' + c.c2 + '" stroke="#1a0a05" stroke-width="3"/><circle cx="' + (p.x - 4) + '" cy="' + (p.y - 5) + '" r="6" fill="' + c.c1 + '"/>');
     }
-    var h = '<div class="card" data-key="mapTab"><div class="mapw"><div data-static data-key="map' + t.id + t.name + '">' + F.boardSvg(t) + '</div><svg viewBox="0 0 960 1000" data-key="mapo">' + o.join('') + '</svg></div>';
+    var h = '<div class="card" data-key="mapTab"><div class="mapw"><div data-static data-key="map' + t.id + t.name + '">' + F.boardSvg(t) + '</div><svg viewBox="-40 -40 1040 1080" data-key="mapo">' + o.join('') + '</svg></div>';
     h += '<p class="mapLegend">' + (picking ? 'Tap a highlighted room to walk in.' : 'Your piece has the white ring. Staircases in the corners are the secret passages.') + '</p></div>';
     return h;
   }

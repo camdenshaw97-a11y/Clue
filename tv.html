@@ -94,12 +94,15 @@
   #lobby .setup .go .btn { font-size: 38px; padding: 16px 48px 12px; flex: none; }
 
   /* ---- game: the board ---- */
-  #boardWrap { position: absolute; left: 40px; top: 40px; width: 960px; height: 1000px; border-radius: 6px; box-shadow: 0 0 0 6px var(--frame), 0 0 0 10px var(--accent), 0 0 0 15px #000, 0 30px 70px #000c; }
+  #boardWrap { position: absolute; left: 40px; top: 40px; width: 960px; height: 1000px; }
+  #boardWrap::before { content: ""; position: absolute; inset: -40px; box-shadow: 0 30px 80px #000d; pointer-events: none; }
   #board, #toks { position: absolute; inset: 0; }
-  #board svg { display: block; width: 960px; height: 1000px; border-radius: 4px; }
+  #board svg { display: block; position: absolute; left: -40px; top: -40px; width: 1040px; height: 1080px; }
   #board .rn { transition: fill .3s; }
   #board .rn.hot { animation: rnHot 1s ease-in-out infinite; }
   @keyframes rnHot { 50% { fill: #fff; } }
+  #board .plq.hot rect:last-of-type { animation: plqHot 1s ease-in-out infinite; }
+  @keyframes plqHot { 50% { stroke: #fff; stroke-width: 4px; } }
   .rmglow { position: absolute; border-radius: 4px; pointer-events: none; box-shadow: inset 0 0 0 5px var(--accent), inset 0 0 40px var(--accent); opacity: 0; transition: opacity .3s; z-index: 2; }
   .rmglow.on { opacity: .9; animation: glowPulse 1.4s ease-in-out infinite; }
   .rmglow.can { opacity: .75; box-shadow: inset 0 0 0 4px #fff, inset 0 0 30px #ffffff88; }
@@ -123,8 +126,8 @@
   .weap .ico { width: 24px; height: 24px; }
   .weap.hot { z-index: 6; animation: weapHot 1s ease-in-out 3; }
   @keyframes weapHot { 50% { transform: scale(1.5); box-shadow: 0 0 0 2px #2b1a0c, 0 0 20px 6px #fff; } }
-  #dice { position: absolute; left: 360px; top: 498px; width: 200px; display: flex; gap: 18px; justify-content: center; z-index: 3; pointer-events: none; }
-  .die { width: 60px; height: 60px; border-radius: 12px; background: linear-gradient(#fff, #ece4d6); box-shadow: 0 0 0 3px #1a0a05, 0 8px 16px #0009, inset 0 -4px 0 #0002; display: grid; grid-template-columns: repeat(3, 1fr); grid-template-rows: repeat(3, 1fr); padding: 8px; box-sizing: border-box; }
+  #dice { position: absolute; left: 360px; top: 612px; width: 200px; display: flex; gap: 16px; justify-content: center; z-index: 3; pointer-events: none; }
+  .die { width: 54px; height: 54px; border-radius: 11px; background: linear-gradient(#fff, #ece4d6); box-shadow: 0 0 0 3px #1a0a05, 0 8px 16px #0009, inset 0 -4px 0 #0002; display: grid; grid-template-columns: repeat(3, 1fr); grid-template-rows: repeat(3, 1fr); padding: 8px; box-sizing: border-box; }
   .die i { border-radius: 50%; background: #7a1a26; opacity: 0; margin: 2px; }
   .die i.on { opacity: 1; }
   .die.roll { animation: dieRoll .62s cubic-bezier(.2, .8, .3, 1); }
