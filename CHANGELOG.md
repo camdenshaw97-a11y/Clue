@@ -6,6 +6,18 @@ glance which version a screen is running.
 
 Times are Pacific.
 
+## 1.3.1 · November 10, 2026
+
+**Fix: boxed in no longer stalls the game**
+- When every door out of your room (or every hallway square around you) is blocked by other
+  pieces, the phone used to show the "Where to?" list with every room greyed out and no way to
+  end the turn, so the whole game waited on you. Now a boxed-in turn shows BOXED IN with Accuse
+  and End turn, the TV says "boxed in: every way out is blocked", and the turn moves on by itself
+  after six seconds if you don't accuse (the clock bar shows the countdown). The same happens
+  whether you were boxed in before rolling or only found out after the roll.
+- If your doors are blocked but your room has a secret passage, you can still take it; rolling
+  instead just costs you the turn, as in the real game.
+
 ## 1.3 · October 28, 2026
 
 **Every screen redrawn to Camden's "Clue Screens" design**

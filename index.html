@@ -662,6 +662,14 @@
 
   function turnCard() {
     var g = G(), t = g.turn, h, at = g.pawns[me.suspect], here = at.r != null ? at.r : -1;
+    // Boxed in: every door (and the hallway around you) is blocked by other pieces. Nothing to pick,
+    // so the turn moves on by itself in a moment; you can still accuse first.
+    if (t.stuck && !t.suggested && !me.canSuggest && !me.canRoll) {
+      h = '<div class="card mine" data-key="main" data-tab="YOUR MOVE"><div class="say bad"><b>BOXED IN</b><span>Every way out of ' + esc(here >= 0 ? rThe(here) : 'here') + ' is blocked by other pieces, so you stay put. Your turn ends in a moment; accuse now if you’re sure.</span></div>';
+      if (t.roll) h += '<div class="dice">' + t.roll.map(die).join('') + '</div>';
+      h += '<div class="row2"><button class="btn red" data-a="accuse">Accuse</button><button class="btn gold" data-a="end">End turn</button></div>';
+      return h + clockHtml() + '</div>';
+    }
     // Rolled: pick where to go.
     if (me.opts) {
       var opts = me.opts.slice().sort(function (a, b) { return (a.steps == null) - (b.steps == null) || (b.reach - a.reach) || a.steps - b.steps; });
@@ -693,10 +701,6 @@
       h = '<div class="card mine" data-key="main" data-tab="YOUR MOVE"><div class="say"><b>YOUR TURN</b><span>' + esc(sName(me.suspect)) + ', ' + esc(whereIs(me.suspect)) + '.</span></div>';
       h += '<button class="roll" data-a="roll" aria-label="Roll the dice"><span class="face">' + [0, 1, 2, 3, 4, 5, 6, 7, 8].map(function (k) { return '<i class="' + (PIPS[5].indexOf(k) >= 0 ? 'on' : '') + '"></i>'; }).join('') + '</span></button><div class="rollTxt">TAP TO ROLL</div>';
       h += '<div class="row2">' + (me.canPassage ? '<button class="btn sm" data-a="passage">Secret passage<small>TO ' + esc(T().rooms[t.passage].name.toUpperCase()) + '</small></button>' : '<button class="btn sm ghost" disabled>No passage here</button>') + '<button class="btn red sm" data-a="accuse">Accuse</button></div>';
-      return h + clockHtml() + '</div>';
-    }
-    if (t.stuck) {
-      h = '<div class="card mine" data-key="main" data-tab="YOUR MOVE"><div class="say bad"><b>BOXED IN</b><span>Every way out is blocked by other pieces. You can still accuse.</span></div><div class="row2"><button class="btn red" data-a="accuse">Accuse</button><button class="btn gold" data-a="end">End turn</button></div>';
       return h + clockHtml() + '</div>';
     }
     h = '<div class="card mine" data-key="main" data-tab="YOUR MOVE"><div class="say"><b>IN THE HALLWAY</b><span>You’ll get there next turn. Accuse now if you’re sure, or end your turn.</span></div><div class="row2"><button class="btn red" data-a="accuse">Accuse</button><button class="btn gold" data-a="end">End turn</button></div>';

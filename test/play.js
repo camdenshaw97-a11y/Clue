@@ -12,7 +12,7 @@ process.env.RESTORE_WINDOW_MS = '600000';
 process.env.SPEED_UP = '40';
 const WebSocket = require('ws');
 const B = require('../boards');
-const { server, rooms, deduce, packRoom, restoreRoom, _t } = require('../server');
+const { server, rooms, deduce, packRoom, restoreRoom, pushAll, _t } = require('../server');
 
 const PORT = 3998;
 let failures = 0, passes = 0;
@@ -265,6 +265,44 @@ async function main() {
   check('when everyone has accused wrongly, nobody wins', await tv2.until(s => s.phase === 'gameOver' && s.game.why === 'nobody' && !s.game.winner, 4000));
   for (const p of q) p.close();
   tv2.close();
+
+  /* ======================== game 2b: boxed in — every door blocked by other pieces */
+  const tvb = new Screen('tvb'); await tvb.ready;
+  tvb.send({ t: 'create' });
+  await tvb.until(s => s && s.code);
+  const qb = [new Screen('F'), new Screen('G'), new Screen('H')];
+  for (const p of qb) await p.ready;
+  qb[0].send({ t: 'join', code: tvb.state.code, name: 'Fay', suspect: 0 }); await qb[0].until(s => s && s.me);
+  qb[1].send({ t: 'join', code: tvb.state.code, name: 'Gus', suspect: 1 }); await qb[1].until(s => s && s.me);
+  qb[2].send({ t: 'join', code: tvb.state.code, name: 'Hal', suspect: 2 }); await qb[2].until(s => s && s.me);
+  tvb.send({ t: 'h', a: 'start' });
+  await tvb.until(s => s.phase === 'intro');
+  tvb.send({ t: 'h', a: 'skipIntro' });
+  await tvb.until(s => s.phase === 'turn');
+  const rb = roomOf(tvb), gb = rb.game;
+  const phoneOf = id => qb.find(p => p.state.me.id === id);
+  const doorSquares = r => B.DOORS.filter(d => d.room === r).map(d => ({ x: d.x, y: d.y }));
+  // Fay starts her turn in the Library (two doors, no passage) with Gus and Hal standing outside both doors.
+  const first = gb.cur, s0 = gb.players[first].suspect, others = [0, 1, 2].filter(x => x !== s0);
+  gb.pawns[s0] = { r: 8 };
+  doorSquares(8).forEach((sq, k) => { gb.pawns[others[k]] = sq; });
+  _t.startTurn(rb); pushAll(rb);
+  const ph1 = phoneOf(first);
+  check('boxed in at the start of a turn: nothing to roll for, and the turn is on a clock', await ph1.until(s => s.game.turn.stuck && !s.me.canRoll && s.me.canEnd && s.game.clock && s.game.clock.what === 'next', 2000));
+  check('…the TV says so', tvb.state.game.log.some(l => /boxed in/.test(l.text)));
+  check('…and the turn moves on by itself', await tvb.until(s => s.phase === 'turn' && s.game.cur !== first, 3000));
+  // The next player is in the Study: one door, blocked, but the secret passage is open. They roll anyway.
+  const second = gb.cur, s1 = gb.players[second].suspect, rest = [0, 1, 2].filter(x => x !== s1);
+  gb.pawns[s1] = { r: 0 };
+  gb.pawns[rest[0]] = doorSquares(0)[0]; gb.pawns[rest[1]] = { r: 4 };
+  _t.startTurn(rb); pushAll(rb);
+  const ph2 = phoneOf(second);
+  check('a blocked door with a passage open is not boxed in', await ph2.until(s => s.me.canRoll && s.me.canPassage && !s.game.turn.stuck, 2000));
+  ph2.send({ t: 'roll' });
+  check('rolling with every door blocked: no list of rooms, just a boxed-in turn on a clock', await ph2.until(s => s.game.turn.stuck && !s.me.opts && !s.me.canRoll && s.me.canEnd && s.game.clock && s.game.clock.what === 'next', 2000));
+  check('…and that turn moves on too', await tvb.until(s => s.phase === 'turn' && s.game.cur !== second, 3000));
+  for (const p of qb) p.close();
+  tvb.close();
 
   /* ======================== games 3+: bots play whole games on every board */
   for (const [k, theme] of B.THEMES.map(t => t.id).entries()) {

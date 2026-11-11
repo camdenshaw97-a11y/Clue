@@ -57,6 +57,7 @@ const MOVE_EXTRA_MS = 650;
 const PASSAGE_MS = 1700;
 const SUGGEST_MS = 3400;               // the suggestion stays up on the TV before the questioning starts
 const PASS_MS = 1300;                  // "can't disprove it" stays up this long before the next player
+const STUCK_MS = 6000;                 // boxed in: the turn moves on by itself after this long (you can still accuse)
 const RESULT_MS = 3200;                // a card was shown
 const NOBODY_MS = 4200;                // nobody could disprove it
 const ACCUSE_MS = 5600;                // the drum roll before the envelope opens
@@ -375,7 +376,7 @@ function freshClock(room) {
     case 'result': setClock(room, 'result', 1500); break;
     case 'accuse': setClock(room, 'verdict', ACCUSE_MS); break;
     case 'wrong': setClock(room, 'next', 2000); break;
-    case 'turn': turnClock(room); break;
+    case 'turn': if (g.turn && g.turn.stuck && !g.turn.stay) stuckClock(room); else turnClock(room); break;
     default: armTimer(room);
   }
 }
@@ -470,10 +471,16 @@ function startTurn(room) {
     // Dragged here by someone else's suggestion: you may suggest in this room without moving.
     stay: inRoom >= 0 && me.movedIn === inRoom
   };
-  if (g.turn.stuck) log(room, pname(room, id) + ' is boxed in: every way out is blocked.', 'turn');
   fx(room, 'turn', { pid: id });
-  turnClock(room);
+  if (g.turn.stuck && !g.turn.stay) {
+    // Nothing to roll for and nowhere to go: the turn ends on its own unless they accuse first.
+    log(room, pname(room, id) + ' is boxed in: every way out is blocked.', 'turn');
+    stuckClock(room);
+  } else turnClock(room);
 }
+
+// A boxed-in turn doesn't wait on a phone that has nothing to do; it moves on after a moment.
+function stuckClock(room) { setClock(room, 'next', STUCK_MS, true); }
 
 function nextTurn(room) {
   const g = room.game;
@@ -500,11 +507,12 @@ function doRoll(room, p) {
   g.turn.rolled = true; g.turn.roll = d; g.turn.stay = false;
   me.movedIn = -1;
   g.turn.opts = Boards.reach(at, total, blockedFor(g, me.suspect), g.turn.from);
-  if (!g.turn.opts.some(o => o.steps != null && o.path.length)) g.turn.stuck = true;
+  // Every door blocked (or the hallway around you full): nothing to pick, so there's no list to pick from.
+  if (!g.turn.opts.some(o => o.steps != null && o.path.length)) { g.turn.stuck = true; g.turn.opts = null; }
   log(room, pname(room, p.id) + ' rolled ' + (d.length > 1 ? d.join(' + ') + ' = ' : '') + total + '.', 'roll');
   fx(room, 'roll', { pid: p.id, d });
-  if (g.turn.stuck) log(room, 'Every way out is blocked. ' + pname(room, p.id) + ' stays put.', 'turn');
-  turnClock(room);
+  if (g.turn.stuck) { log(room, 'Every way out is blocked. ' + pname(room, p.id) + ' stays put.', 'turn'); stuckClock(room); }
+  else turnClock(room);
 }
 
 // Walk to a room (or as far toward it as the roll goes).
@@ -1303,4 +1311,4 @@ if (require.main === module) {
   process.on('SIGINT', stop);
 }
 
-module.exports = { server, rooms, packRoom, unpackRoom, restoreRoom, loadRoom, deduce, pushAll, _t: { startGame, active } };
+module.exports = { server, rooms, packRoom, unpackRoom, restoreRoom, loadRoom, deduce, pushAll, _t: { startGame, active, startTurn, nextTurn } };
